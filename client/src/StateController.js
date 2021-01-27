@@ -91,13 +91,14 @@ function StateController(props) {
             if (data.data) {
                 //since the user session on the server could contain old data, it checks against the db and updates to the new
                 //user configuration to reflect any changes
-                API.checkUser(data.email).then(({ data }) => {
+
+                API.checkUser(data.data.email).then(({ data }) => {
                     setUserState({
                         ...userState,
                         loggedIn: true,
                         ...data[0],
                     });
-
+                    console.log({ ...data[0] });
                     //upon login and user saving it will load your user cart
                     loadCart();
                 });
@@ -202,7 +203,13 @@ function StateController(props) {
         API.logout().then(({ status }) => {
             if (status === 200) {
                 //window.location.href = "/";
-                setUserState({ ...userState, loggedIn: false });
+                setUserState({
+                    loggedIn: false,
+                    _id: "",
+                    first_name: "",
+                    last_name: "",
+                    email: "",
+                });
                 setCartIdState([]);
                 setCartState({
                     ...cartState,
